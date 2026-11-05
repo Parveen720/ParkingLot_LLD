@@ -1,20 +1,16 @@
 #pragma once
 
-#include <memory>
 #include "Vehicle.h"
-using namespace std;
-class ParkingSpot {
 
+class ParkingSpot {
 private:
     int spotId;
     VehicleType spotType;
-    shared_ptr<Vehicle> vehicle;
+    Vehicle* vehicle = nullptr;
 
 public:
-
     ParkingSpot(int id, VehicleType type)
-        : spotId(id), spotType(type) {
-    }
+        : spotId(id), spotType(type) {}
 
     bool isAvailable() const {
         return vehicle == nullptr;
@@ -25,8 +21,7 @@ public:
                spotType == v.getVehicleType();
     }
 
-    bool parkVehicle(shared_ptr<Vehicle> v) {
-
+    bool parkVehicle(Vehicle* v) {
         if (v == nullptr || !canFitVehicle(*v)) {
             return false;
         }
@@ -36,7 +31,7 @@ public:
     }
 
     void removeVehicle() {
-        vehicle.reset();
+        vehicle = nullptr;
     }
 
     int getSpotId() const {

@@ -1,9 +1,7 @@
-
 #pragma once
 
 #include <iostream>
 #include <unordered_map>
-#include <memory>
 #include <string>
 
 #include "ParkingLot.h"
@@ -13,7 +11,6 @@
 using namespace std;
 
 class ParkingManager {
-
 private:
     ParkingLot& parkingLot;
 
@@ -21,7 +18,6 @@ private:
 
     int nextTicketId = 1;
 
-    // Hourly parking rates
     double getHourlyRate(VehicleType type) const {
         switch (type) {
             case VehicleType::MOTORCYCLE:
@@ -38,13 +34,11 @@ private:
     }
 
 public:
-
     ParkingManager(ParkingLot& lot)
-        : parkingLot(lot) {
-    }
+        : parkingLot(lot) {}
 
-    // Park a vehicle
-    bool parkVehicle(shared_ptr<Vehicle> vehicle) {
+    // Park vehicle
+    bool parkVehicle(Vehicle* vehicle) {
 
         if (vehicle == nullptr) {
             cout << "Invalid vehicle!\n";
@@ -62,11 +56,11 @@ public:
         }
 
         if (!spot->parkVehicle(vehicle)) {
-            cout << "Parking failed!\n";
             return false;
         }
 
-        string ticketId = "T" + to_string(nextTicketId++);
+        string ticketId =
+            "T" + to_string(nextTicketId++);
 
         ParkingTicket ticket(
             ticketId,
@@ -86,7 +80,7 @@ public:
         return true;
     }
 
-    // Unpark a vehicle
+    // Unpark vehicle
     bool unparkVehicle(const string& ticketId) {
 
         auto it = activeTickets.find(ticketId);
@@ -103,7 +97,6 @@ public:
             return false;
         }
 
-        // Find the corresponding parking spot
         ParkingSpot* spot = parkingLot.getSpot(
             ticket.getFloorId(),
             ticket.getSpotId()
@@ -114,16 +107,15 @@ public:
             return false;
         }
 
-        // Close ticket and calculate fee
         ticket.close();
 
         double hours = ticket.getBillableHours();
 
-        double rate = getHourlyRate(ticket.getVehicleType());
+        double rate =
+            getHourlyRate(ticket.getVehicleType());
 
         double amount = hours * rate;
 
-        // Release parking spot
         spot->removeVehicle();
 
         cout << "\nVehicle unparked successfully!\n";
@@ -137,7 +129,7 @@ public:
         return true;
     }
 
-    // Display all active tickets
+    // Display active tickets
     void displayActiveTickets() const {
 
         if (activeTickets.empty()) {
@@ -152,6 +144,7 @@ public:
             const ParkingTicket& ticket = entry.second;
 
             if (ticket.isActive()) {
+
                 cout << "Ticket ID: "
                      << ticket.getTicketId() << "\n";
 

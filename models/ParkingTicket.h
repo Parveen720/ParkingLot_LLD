@@ -1,13 +1,13 @@
-
 #pragma once
+
 #include <string>
 #include <chrono>
+#include <algorithm>
 #include "../enums/VehicleType.h"
 
 using namespace std;
 
 class ParkingTicket {
-
 private:
     string ticketId;
     string vehicleNumber;
@@ -23,17 +23,20 @@ private:
     bool active;
 
 public:
-
-    ParkingTicket(string id, string number,
-                  VehicleType type, int floor, int spot)
+    ParkingTicket(
+        string id,
+        string number,
+        VehicleType type,
+        int floor,
+        int spot
+    )
         : ticketId(id),
           vehicleNumber(number),
           vehicleType(type),
           floorId(floor),
           spotId(spot),
           entryTime(chrono::system_clock::now()),
-          active(true) {
-    }
+          active(true) {}
 
     void close() {
         if (active) {
@@ -43,20 +46,19 @@ public:
     }
 
     double getBillableHours() const {
-
         if (active) {
             return 0;
         }
 
-        auto duration = chrono::duration_cast<
-            chrono::seconds>(exitTime - entryTime);
+        auto duration =
+            chrono::duration_cast<chrono::seconds>(
+                exitTime - entryTime
+            );
 
         long long seconds = duration.count();
 
-        // Round up partial hours.
         int hours = (seconds + 3599) / 3600;
 
-        // Minimum one hour charge.
         return max(1, hours);
     }
 

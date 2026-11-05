@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Vehicle {
+class Vehicle {                                                                           
 protected:
     string vehicleNumber;
 
@@ -18,7 +18,7 @@ public:
 
     string getVehicleNumber() const {
         return vehicleNumber;
-    }
+    } 
 
     virtual ~Vehicle() = default;
 };

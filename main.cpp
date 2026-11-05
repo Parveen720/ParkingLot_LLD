@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 
 #include "ParkingLot.h"
 #include "ParkingManager.h"
@@ -12,56 +11,69 @@ using namespace std;
 
 int main() {
 
+    // Create parking lot
     ParkingLot parkingLot("City Parking");
 
+    // Add floors
     parkingLot.addFloor(1);
     parkingLot.addFloor(2);
 
-    // 3. Add parking spots
+    // Add spots on floor 1
+    parkingLot.addParkingSpot(
+        1, 101, VehicleType::MOTORCYCLE
+    );
 
-    // Floor 1
-    parkingLot.addParkingSpot(1, 101, VehicleType::MOTORCYCLE);
-    parkingLot.addParkingSpot(1, 102, VehicleType::CAR);
-    parkingLot.addParkingSpot(1, 103, VehicleType::CAR);
+    parkingLot.addParkingSpot(
+        1, 102, VehicleType::CAR
+    );
 
-    // Floor 2
-    parkingLot.addParkingSpot(2, 201, VehicleType::TRUCK);
-    parkingLot.addParkingSpot(2, 202, VehicleType::CAR);
-    parkingLot.addParkingSpot(2, 203, VehicleType::MOTORCYCLE);
+    parkingLot.addParkingSpot(
+        1, 103, VehicleType::CAR
+    );
 
-    // 4. Create Parking Manager
+    // Add spots on floor 2
+    parkingLot.addParkingSpot(
+        2, 201, VehicleType::TRUCK
+    );
+
+    parkingLot.addParkingSpot(
+        2, 202, VehicleType::CAR
+    );
+
+    parkingLot.addParkingSpot(
+        2, 203, VehicleType::MOTORCYCLE
+    );
+
+    // Create manager
     ParkingManager manager(parkingLot);
 
-    // 5. Create vehicles
-    shared_ptr<Vehicle> car =
-        make_shared<Car>("RJ14AB1234");
+    // Create vehicle objects
+    Car car("RJ14AB1234");
 
-    shared_ptr<Vehicle> bike =
-        make_shared<Motorcycle>("RJ14CD5678");
+    Motorcycle bike("RJ14CD5678");
 
-    shared_ptr<Vehicle> truck =
-        make_shared<Truck>("RJ14EF9012");
+    Truck truck("RJ14EF9012");
 
-    // 6. Park vehicles
-    cout << "\n========== PARKING VEHICLES ==========\n";
+    // Park vehicles
+    cout << "\n========== PARK VEHICLES ==========\n";
 
-    manager.parkVehicle(car);
-    manager.parkVehicle(bike);
-    manager.parkVehicle(truck);
+    manager.parkVehicle(&car);
+    manager.parkVehicle(&bike);
+    manager.parkVehicle(&truck);
 
-    // 7. Display active tickets
+    // Display active tickets
     cout << "\n========== ACTIVE TICKETS ==========\n";
 
     manager.displayActiveTickets();
 
-    // 8. Unpark vehicles
+    // Unpark vehicles
     cout << "\n========== UNPARK VEHICLES ==========\n";
 
     manager.unparkVehicle("T1");
     manager.unparkVehicle("T2");
 
-    // 9. Display remaining active tickets
-    cout << "\n========== REMAINING ACTIVE TICKETS ==========\n";
+    // Display remaining tickets
+    cout << "\n========== REMAINING TICKETS ==========\n";
 
     manager.displayActiveTickets();
 
